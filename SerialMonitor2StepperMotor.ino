@@ -134,6 +134,19 @@ void showParsedData() {
 
 
 //============ for motor control ================//
+
+void MotorsOff() { // turns off motors, to stop current draw. Useful after moving, or when not operating
+    digitalWrite(A1, LOW);
+    digitalWrite(A1_bar, LOW);
+    digitalWrite(B1, LOW);
+    digitalWrite(B1_bar, LOW);
+
+    digitalWrite(A2, LOW);
+    digitalWrite(A2_bar, LOW);
+    digitalWrite(B2, LOW);
+    digitalWrite(B2_bar, LOW);
+}
+
 void StepUp() {
   for (int i = 0; i < (steps / 4) ; i++) {
     if (upTrigger) {
@@ -177,6 +190,7 @@ void StepUp() {
     delayMicroseconds (x);
   }
   Serial.println("StepUp Subroutine Complete");
+  MotorsOff();
 }
 
 void StepDown() {
@@ -222,6 +236,7 @@ void StepDown() {
     delayMicroseconds (x);
   }
   Serial.println("StepDown Subroutine Complete");
+  MotorsOff();
 }
 
 void StepLeft() {
@@ -267,6 +282,7 @@ void StepLeft() {
     delayMicroseconds (x);
   }
     Serial.println("StepLeft Subroutine Complete");
+    MotorsOff();
 }
 
 void StepRight() {
@@ -312,6 +328,7 @@ void StepRight() {
     delayMicroseconds (x);
   }
     Serial.println("StepRight Subroutine Complete");
+    MotorsOff();
 }
 
 //=================== Arduino Setup ===================//
