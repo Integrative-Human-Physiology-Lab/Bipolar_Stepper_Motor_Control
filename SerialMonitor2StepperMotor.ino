@@ -56,32 +56,40 @@ bool rightTrigger = 0;
 void limitUp() {
   if (digitalRead(up) == HIGH) {
     upTrigger = 0;
+    digitalWrite(LED_BUILTIN, LOW);
   } else {
     upTrigger = 1;
+    digitalWrite(LED_BUILTIN, HIGH);
   }
 }
 
 void limitDown() {
   if (digitalRead(down) == HIGH) {
     downTrigger = 0;
+    digitalWrite(LED_BUILTIN, LOW);
   } else {
     downTrigger = 1;
+    digitalWrite(LED_BUILTIN, HIGH);
   }
 }
 
 void limitLeft() {
   if (digitalRead(left) == HIGH) {
     leftTrigger = 0;
+    digitalWrite(LED_BUILTIN, LOW);
   } else {
     leftTrigger = 1;
+    digitalWrite(LED_BUILTIN, HIGH);
   }
 }
 
 void limitRight() {
   if (digitalRead(right) == HIGH) {
     rightTrigger = 0;
+    digitalWrite(LED_BUILTIN, LOW);
   } else {
     rightTrigger = 1;
+    digitalWrite(LED_BUILTIN, HIGH);
   }
 }
 
@@ -136,15 +144,15 @@ void showParsedData() {
 //============ for motor control ================//
 
 void MotorsOff() { // turns off motors, to stop current draw. Useful after moving, or when not operating
-    digitalWrite(A1, LOW);
-    digitalWrite(A1_bar, LOW);
-    digitalWrite(B1, LOW);
-    digitalWrite(B1_bar, LOW);
+  digitalWrite(A1, LOW);
+  digitalWrite(A1_bar, LOW);
+  digitalWrite(B1, LOW);
+  digitalWrite(B1_bar, LOW);
 
-    digitalWrite(A2, LOW);
-    digitalWrite(A2_bar, LOW);
-    digitalWrite(B2, LOW);
-    digitalWrite(B2_bar, LOW);
+  digitalWrite(A2, LOW);
+  digitalWrite(A2_bar, LOW);
+  digitalWrite(B2, LOW);
+  digitalWrite(B2_bar, LOW);
 }
 
 void StepUp() {
@@ -281,8 +289,8 @@ void StepLeft() {
     digitalWrite(B2_bar, HIGH);
     delayMicroseconds (x);
   }
-    Serial.println("StepLeft Subroutine Complete");
-    MotorsOff();
+  Serial.println("StepLeft Subroutine Complete");
+  MotorsOff();
 }
 
 void StepRight() {
@@ -327,8 +335,8 @@ void StepRight() {
     digitalWrite(B2_bar, LOW);
     delayMicroseconds (x);
   }
-    Serial.println("StepRight Subroutine Complete");
-    MotorsOff();
+  Serial.println("StepRight Subroutine Complete");
+  MotorsOff();
 }
 
 //=================== Arduino Setup ===================//
@@ -362,6 +370,9 @@ void setup() {
   attachInterrupt(digitalPinToInterrupt(down), limitDown,  CHANGE);
   attachInterrupt(digitalPinToInterrupt(left), limitLeft,  CHANGE);
   attachInterrupt(digitalPinToInterrupt(right), limitRight, CHANGE);
+
+  // Built-in LED to flash when we hit any of our limit switches
+  pinMode(LED_BUILTIN, OUTPUT);
 }
 
 //============= Main loop ================//
