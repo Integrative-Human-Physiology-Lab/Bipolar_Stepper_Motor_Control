@@ -40,7 +40,8 @@ boolean newData = false;
 
 /*
    Limit switch pin/interrupt instantiations
-   Note: these pins vary depending on the board used
+   Note: these pins vary depending on the board used. Validate at
+   https://www.arduino.cc/reference/en/language/functions/external-interrupts/attachinterrupt/
 */
 byte up = 18;
 byte down = 19;
@@ -143,35 +144,50 @@ void showParsedData() {
 
 //============ for motor control ================//
 
-void MotorsOff() { // turns off motors, to stop current draw. Useful after moving, or when not operating
-  digitalWrite(A1, LOW);
-  digitalWrite(A1_bar, LOW);
-  digitalWrite(B1, LOW);
-  digitalWrite(B1_bar, LOW);
+void MotorsOn1() { // turns on motors, to start operating
+  pinMode(A1, OUTPUT);
+  pinMode(A1_bar, OUTPUT);
+  pinMode(B1, OUTPUT);
+  pinMode(B1_bar, OUTPUT);
+}
 
-  digitalWrite(A2, LOW);
-  digitalWrite(A2_bar, LOW);
-  digitalWrite(B2, LOW);
-  digitalWrite(B2_bar, LOW);
+void MotorsOff1() { // turns off motors, to stop current draw. Useful after moving, or when not operating
+  pinMode(A1, INPUT);
+  digitalWrite(A1, HIGH);
+  pinMode(A1_bar, INPUT);
+  digitalWrite(A1_bar, HIGH);
+  pinMode(B1, INPUT);
+  digitalWrite(B1, HIGH);
+  pinMode(B1_bar, INPUT);
+  digitalWrite(B1_bar, HIGH);
+}
+
+void MotorsOn2() { // turns on motors, to start operating
+  pinMode(A2, OUTPUT);
+  pinMode(A2_bar, OUTPUT);
+  pinMode(B2, OUTPUT);
+  pinMode(B2_bar, OUTPUT);
+}
+
+void MotorsOff2() { // turns off motors, to stop current draw. Useful after moving, or when not operating
+  pinMode(A2, INPUT);
+  digitalWrite(A2, HIGH);
+  pinMode(A2_bar, INPUT);
+  digitalWrite(A2_bar, HIGH);
+  pinMode(B2, INPUT);
+  digitalWrite(B2, HIGH);
+  pinMode(B2_bar, INPUT);
+  digitalWrite(B2_bar, HIGH);
 }
 
 void StepUp() {
+  MotorsOn1();
   for (int i = 0; i < (steps / 4) ; i++) {
     if (upTrigger) {
       Serial.println("Upper limit switch detects collision");
       break;
     }
     digitalWrite(A1, HIGH);
-    digitalWrite(A1_bar, LOW);
-    digitalWrite(B1, LOW);
-    digitalWrite(B1_bar, LOW);
-    delayMicroseconds (x);
-
-    if (upTrigger) {
-      Serial.println("Upper limit switch detects collision");
-      break;
-    }
-    digitalWrite(A1, LOW);
     digitalWrite(A1_bar, LOW);
     digitalWrite(B1, HIGH);
     digitalWrite(B1_bar, LOW);
@@ -183,7 +199,7 @@ void StepUp() {
     }
     digitalWrite(A1, LOW);
     digitalWrite(A1_bar, HIGH);
-    digitalWrite(B1, LOW);
+    digitalWrite(B1, HIGH);
     digitalWrite(B1_bar, LOW);
     delayMicroseconds (x);
 
@@ -192,22 +208,33 @@ void StepUp() {
       break;
     }
     digitalWrite(A1, LOW);
+    digitalWrite(A1_bar, HIGH);
+    digitalWrite(B1, LOW);
+    digitalWrite(B1_bar, HIGH);
+    delayMicroseconds (x);
+
+    if (upTrigger) {
+      Serial.println("Upper limit switch detects collision");
+      break;
+    }
+    digitalWrite(A1, HIGH);
     digitalWrite(A1_bar, LOW);
     digitalWrite(B1, LOW);
     digitalWrite(B1_bar, HIGH);
     delayMicroseconds (x);
   }
   Serial.println("StepUp Subroutine Complete");
-  MotorsOff();
+  MotorsOff1();
 }
 
 void StepDown() {
+  MotorsOn1();
   for (int i = 0; i < (steps / 4); i++) {
     if (downTrigger) {
       Serial.println("Lower limit switch detects collision");
       break;
     }
-    digitalWrite(A1, LOW);
+    digitalWrite(A1, HIGH);
     digitalWrite(A1_bar, LOW);
     digitalWrite(B1, LOW);
     digitalWrite(B1_bar, HIGH);
@@ -220,7 +247,7 @@ void StepDown() {
     digitalWrite(A1, LOW);
     digitalWrite(A1_bar, HIGH);
     digitalWrite(B1, LOW);
-    digitalWrite(B1_bar, LOW);
+    digitalWrite(B1_bar, HIGH);
     delayMicroseconds (x);
 
     if (downTrigger) {
@@ -228,7 +255,7 @@ void StepDown() {
       break;
     }
     digitalWrite(A1, LOW);
-    digitalWrite(A1_bar, LOW);
+    digitalWrite(A1_bar, HIGH);
     digitalWrite(B1, HIGH);
     digitalWrite(B1_bar, LOW);
     delayMicroseconds (x);
@@ -239,15 +266,16 @@ void StepDown() {
     }
     digitalWrite(A1, HIGH);
     digitalWrite(A1_bar, LOW);
-    digitalWrite(B1, LOW);
+    digitalWrite(B1, HIGH);
     digitalWrite(B1_bar, LOW);
     delayMicroseconds (x);
   }
   Serial.println("StepDown Subroutine Complete");
-  MotorsOff();
+  MotorsOff1();
 }
 
 void StepLeft() {
+  MotorsOn2();
   for (int i = 0; i < (steps / 4) ; i++) {
     if (leftTrigger) {
       Serial.println("Left limit switch detects collision");
@@ -255,7 +283,7 @@ void StepLeft() {
     }
     digitalWrite(A2, HIGH);
     digitalWrite(A2_bar, LOW);
-    digitalWrite(B2, LOW);
+    digitalWrite(B2, HIGH);
     digitalWrite(B2_bar, LOW);
     delayMicroseconds (x);
 
@@ -264,7 +292,7 @@ void StepLeft() {
       break;
     }
     digitalWrite(A2, LOW);
-    digitalWrite(A2_bar, LOW);
+    digitalWrite(A2_bar, HIGH);
     digitalWrite(B2, HIGH);
     digitalWrite(B2_bar, LOW);
     delayMicroseconds (x);
@@ -276,30 +304,31 @@ void StepLeft() {
     digitalWrite(A2, LOW);
     digitalWrite(A2_bar, HIGH);
     digitalWrite(B2, LOW);
-    digitalWrite(B2_bar, LOW);
+    digitalWrite(B2_bar, HIGH);
     delayMicroseconds (x);
 
     if (leftTrigger) {
       Serial.println("Left limit switch detects collision");
       break;
     }
-    digitalWrite(A2, LOW);
+    digitalWrite(A2, HIGH);
     digitalWrite(A2_bar, LOW);
     digitalWrite(B2, LOW);
     digitalWrite(B2_bar, HIGH);
     delayMicroseconds (x);
   }
   Serial.println("StepLeft Subroutine Complete");
-  MotorsOff();
+  MotorsOff2();
 }
 
 void StepRight() {
+  MotorsOn2();
   for (int i = 0; i < (steps / 4); i++) {
     if (rightTrigger) {
       Serial.println("Right limit switch detects collision");
       break;
     }
-    digitalWrite(A2, LOW);
+    digitalWrite(A2, HIGH);
     digitalWrite(A2_bar, LOW);
     digitalWrite(B2, LOW);
     digitalWrite(B2_bar, HIGH);
@@ -312,7 +341,7 @@ void StepRight() {
     digitalWrite(A2, LOW);
     digitalWrite(A2_bar, HIGH);
     digitalWrite(B2, LOW);
-    digitalWrite(B2_bar, LOW);
+    digitalWrite(B2_bar, HIGH);
     delayMicroseconds (x);
 
     if (rightTrigger) {
@@ -320,7 +349,7 @@ void StepRight() {
       break;
     }
     digitalWrite(A2, LOW);
-    digitalWrite(A2_bar, LOW);
+    digitalWrite(A2_bar, HIGH);
     digitalWrite(B2, HIGH);
     digitalWrite(B2_bar, LOW);
     delayMicroseconds (x);
@@ -331,26 +360,19 @@ void StepRight() {
     }
     digitalWrite(A2, HIGH);
     digitalWrite(A2_bar, LOW);
-    digitalWrite(B2, LOW);
+    digitalWrite(B2, HIGH);
     digitalWrite(B2_bar, LOW);
     delayMicroseconds (x);
   }
   Serial.println("StepRight Subroutine Complete");
-  MotorsOff();
+  MotorsOff2();
 }
 
 //=================== Arduino Setup ===================//
 void setup() {
-  // setting our motor pin states (Up/Down, then Left/Right)
-  pinMode(A1, OUTPUT);
-  pinMode(A1_bar, OUTPUT);
-  pinMode(B1, OUTPUT);
-  pinMode(B1_bar, OUTPUT);
-
-  pinMode(A2, OUTPUT);
-  pinMode(A2_bar, OUTPUT);
-  pinMode(B2, OUTPUT);
-  pinMode(B2_bar, OUTPUT);
+  // setting our motor pin states as internal pull-up until ready to actuate
+  MotorsOff1();
+  MotorsOff2();
 
   // For Serial Monitor
   Serial.begin(9600);
@@ -364,7 +386,7 @@ void setup() {
   digitalWrite(left,  HIGH);
   digitalWrite(right, HIGH);
 
-  // These require different syntax for arduino uno rev2 wifi. Check:
+  // These require different syntax for arduino uno rev2 wifi, differ per board. Check:
   // https://www.arduino.cc/reference/en/language/functions/external-interrupts/attachinterrupt/
   attachInterrupt(digitalPinToInterrupt(up), limitUp,    CHANGE);
   attachInterrupt(digitalPinToInterrupt(down), limitDown,  CHANGE);
