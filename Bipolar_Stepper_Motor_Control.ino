@@ -34,10 +34,10 @@ float joystick_speed=0.5;
 //So, the higher the ratio the faster the motor moves.
 
 
-int updownstroke=0;
-int leftrightstroke=0;
-int upperlimitswitch=0;
-int lowerlimitswitch=0;
+// int updownstroke=0;
+// int leftrightstroke=0;
+// int upperlimitswitch=0;
+// int lowerlimitswitch=0;
 
 /*
    Limit switch pin/interrupt instantiations
@@ -368,39 +368,39 @@ void setup() {
   pinMode(right, INPUT_PULLUP);
   pinMode(left, INPUT_PULLUP);
 
-  if(updownstroke==0){
-    Serial.println("Homing starting");
+  // if(updownstroke==0){
+  //   Serial.println("Homing starting");
 
-     while(digitalRead(up) == HIGH){
-        steps=10;
-        StepUp();  
-     }
+  //    while(digitalRead(up) == HIGH){
+  //       steps=10;
+  //       StepUp();  
+  //    }
 
-    while(digitalRead(down) == HIGH){
-      steps=10;
-      StepDown();
-      updownstroke=updownstroke+steps;
-    }
-    while(digitalRead(right) == HIGH){
-        steps=20;
-        StepRight();  
-     }
+  //   while(digitalRead(down) == HIGH){
+  //     steps=10;
+  //     StepDown();
+  //     updownstroke=updownstroke+steps;
+  //   }
+  //   while(digitalRead(right) == HIGH){
+  //       steps=20;
+  //       StepRight();  
+  //    }
 
-    while(digitalRead(left) == HIGH){
-      steps=10;
-      StepLeft();
-      leftrightstroke=leftrightstroke+steps;
-    }
+  //   while(digitalRead(left) == HIGH){
+  //     steps=10;
+  //     StepLeft();
+  //     leftrightstroke=leftrightstroke+steps;
+  //   }
     
-  }
-  Serial.println("updownstroke");
-  Serial.println(updownstroke);
-  Serial.println("leftrightstroke");
-  Serial.println(leftrightstroke);
-  steps=updownstroke/2;
-  StepUp();
-  steps=leftrightstroke/2;
-  StepRight();
+  // }
+  // Serial.println("updownstroke");
+  // Serial.println(updownstroke);
+  // Serial.println("leftrightstroke");
+  // Serial.println(leftrightstroke);
+  // steps=updownstroke/2;
+  // StepUp();
+  // steps=leftrightstroke/2;
+  // StepRight();
   attachPinChangeInterrupt(digitalPinToPinChangeInterrupt(up), limitUp, FALLING);
   attachPinChangeInterrupt(digitalPinToPinChangeInterrupt(down), limitDown, FALLING);
   attachPinChangeInterrupt(digitalPinToPinChangeInterrupt(right), limitRight, FALLING);
