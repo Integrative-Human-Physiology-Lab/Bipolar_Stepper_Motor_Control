@@ -9,7 +9,7 @@
    A_bar / A / B_bar / B
    Black / Red / Yellow / Green
 */
-#include "PinChangeInterrupt.h";
+// #include "PinChangeInterrupt.h";
 
 // for our up/down motor
 #define A1motor_bar    A2                 // the pin connected to the wire A- of the coil A (or to the H-bridge pin controlling the same wire) 
@@ -29,7 +29,7 @@
 #define ydirectionpin A1
 
 int steps = 0;
-float joystick_speed=0.5;
+float joystick_speed=0.1;
 // Note: Change joystick speed as per your like. This is the ratio of movement of motors to movement of joystick. 
 //So, the higher the ratio the faster the motor moves.
 
@@ -401,10 +401,10 @@ void setup() {
   // StepUp();
   // steps=leftrightstroke/2;
   // StepRight();
-  attachPinChangeInterrupt(digitalPinToPinChangeInterrupt(up), limitUp, FALLING);
-  attachPinChangeInterrupt(digitalPinToPinChangeInterrupt(down), limitDown, FALLING);
-  attachPinChangeInterrupt(digitalPinToPinChangeInterrupt(right), limitRight, FALLING);
-  attachPinChangeInterrupt(digitalPinToPinChangeInterrupt(left), limitLeft, FALLING);
+  // attachPinChangeInterrupt(digitalPinToPinChangeInterrupt(up), limitUp, FALLING);
+  // attachPinChangeInterrupt(digitalPinToPinChangeInterrupt(down), limitDown, FALLING);
+  // attachPinChangeInterrupt(digitalPinToPinChangeInterrupt(right), limitRight, FALLING);
+  // attachPinChangeInterrupt(digitalPinToPinChangeInterrupt(left), limitLeft, FALLING);
 
   
 
@@ -417,8 +417,8 @@ void loop() {
    int xdirection=analogRead(xdirectionpin);
    int ydirection=analogRead(ydirectionpin);
   
-    int xdirection_difference= xdirection-525;
-    int ydirection_difference= ydirection-512;
+    int xdirection_difference= xdirection-510;
+    int ydirection_difference= ydirection-505;
 
     if (ydirection_difference < -5) {
       steps=joystick_speed*abs(ydirection_difference);
