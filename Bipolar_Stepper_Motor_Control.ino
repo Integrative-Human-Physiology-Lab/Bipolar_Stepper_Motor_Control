@@ -417,8 +417,8 @@ void loop() {
    int xdirection=analogRead(xdirectionpin);
    int ydirection=analogRead(ydirectionpin);
   
-    int xdirection_difference= xdirection-525;
-    int ydirection_difference= ydirection-512;
+    int xdirection_difference= xdirection-525; // tune me for every new joystick
+    int ydirection_difference= ydirection-512; // tune me for every new joystick
 
     if (ydirection_difference < -5) {
       steps=joystick_speed*abs(ydirection_difference);
